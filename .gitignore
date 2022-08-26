@@ -4,3 +4,5 @@ study_theorem/study_theorem/input/all_times/all*
 study_theorem/study_theorem/input/all_cells/all*
 study_malthus_estimation_simulation/input/all_times/all*
 study_malthus_estimation_simulation/input/all_cells/all*
+__pycache__
+*.png

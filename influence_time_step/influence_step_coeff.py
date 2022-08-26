@@ -1,10 +1,10 @@
 # Script used to compute modulus of complex coefficient versus step time + compute
 # ratio of the coefficient for two specific time step.
+
+# Packages
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.stats
-from sklearn.linear_model import LinearRegression
 from multitype_simulation import Multitype
 
 
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     plt.xlabel("Time")
     plt.ylabel("Second term")
     plt.title(
-        "Second term versus time for different time steps, ratio coefficient : {}".format(
+        "Second term vs time for different steps, ratio coefficient : {}".format(
             np.round(rapport_coefficient_theorique, 2)
         ),
         fontweight="bold",

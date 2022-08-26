@@ -1,3 +1,5 @@
+# Packages
+import os
 import matplotlib.pyplot as plt
 from malthus_estimator_experimental import Malthus_estimator_exp
 from residuals import Residuals
@@ -84,7 +86,7 @@ class Data_analyser(object):
             Name of the directory where figures will be saved.
         """
         # Create directory
-        if os.path.isdir(path_name):
+        if not os.path.isdir(path_name):
             os.mkdir(path_name)
 
         # Save for the class

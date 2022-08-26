@@ -3,7 +3,7 @@
 # time step and residuals and after that plot curves of residuals, depending on
 # the renormalization.
 
-import os
+# Packages
 import numpy as np
 from info_residuals import Info_residuals
 from plot_root_renormalization import Plotter_root

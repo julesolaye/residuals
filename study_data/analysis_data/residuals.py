@@ -1,5 +1,7 @@
+# Packages
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 from malthus_estimator_experimental import Malthus_estimator_exp
 
 
@@ -66,7 +68,7 @@ class Residuals(object):
             malthus_estimator.estim_malthus()
 
         if type_estim == "mean":
-            malthus_estimator.estim_malthus_esperance()
+            malthus_estimator.estim_malthus_mean()
         self.malthus = malthus_estimator.malthus
 
         ## Residuals
@@ -94,7 +96,7 @@ class Residuals(object):
         plt.xlabel("Time")
         plt.ylabel("Variance residuals")
         plt.title("Variance residuals versus time", fontweight="bold")
-        plt.show()
+        plt.savefig(os.path.join(self.path_name, "var_resi_experimental_vs_time.png"))
 
         fig = plt.figure()
         intercept = -1.6
@@ -152,7 +154,7 @@ class Residuals(object):
             Name of the directory where figures will be saved.
         """
         # Create directory
-        if os.path.isdir(path_name):
+        if not os.path.isdir(path_name):
             os.mkdir(path_name)
 
         # Save for the class

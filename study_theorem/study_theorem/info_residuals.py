@@ -1,6 +1,5 @@
+# Packages
 import numpy as np
-import matplotlib.pyplot as plt
-import os
 from sklearn.linear_model import LinearRegression
 
 
@@ -23,7 +22,7 @@ class Info_residuals(object):
     When we have all the informations, we will use an other plot in order to 
     plot our results.
 
-    Parameters
+    Attributes
     ------------
     all_times : "np.array"
         2D array which contains all times of all cells dynamics for each simulation.  
@@ -183,11 +182,10 @@ class Info_residuals(object):
         )
 
         if self.root_renormalization:
-            self.all_residuals_renormalized = self.all_residuals / np.exp(
-                (self.coeff_var) * self.times_residuals
-            )
-        else:
             self.all_residuals_renormalized = self.all_residuals / np.sqrt(
                 self.n_cells_residuals
             )
-
+        else:
+            self.all_residuals_renormalized = self.all_residuals / np.exp(
+                (self.coeff_var) * self.times_residuals
+            )

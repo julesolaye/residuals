@@ -1,7 +1,9 @@
 # This class contains all functions wich can be used in order to simulate cells
 # dynamics with Bellman-Harris process. It may be useful for the creation of data.
 
+# Packages
 import numpy as np
+import scipy.stats
 
 
 def gamma(param_1_k: float, param_2_theta: float) -> float:
@@ -23,7 +25,6 @@ def gamma(param_1_k: float, param_2_theta: float) -> float:
 
 def simulate_division(
     n_cells_init: int,
-    age_cells_init: "np.array",
     law_time_div: "function",
     stopping_criteria: str,
     max_time: float = 0,
@@ -98,8 +99,8 @@ def simulate_division(
 
     # Stopping criteria
     if stopping_criteria == "cells":
-        stopping_test = n_cells[-1] > max_cells
-    else:
+        stopping_test = n_cells[-1] >= max_cells
+    elif stopping_criteria == "time":
         stopping_test = sum(times_between_div) + np.min(time_before_division) > max_time
 
     ### Loop
@@ -118,14 +119,15 @@ def simulate_division(
         n_cells.append(n_cells[-1] + 1)
 
         if stopping_criteria == "cells":
-            stopping_test = n_cells[-1] > max_cells
-        else:
+            stopping_test = n_cells[-1] >= max_cells
+        elif stopping_criteria == "time":
             stopping_test = (
                 sum(times_between_div) + np.min(time_before_division) > max_time
             )
 
     ### Last update
-    time_before_division -= max_time - sum(times_between_div)
+    if stopping_criteria == "time":
+        time_before_division -= max_time - sum(times_between_div)
     times_between_div = np.array(times_between_div)
     times = np.cumsum(times_between_div)
     return times, n_cells, time_before_division

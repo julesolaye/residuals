@@ -1,3 +1,4 @@
+# Packages
 import numpy as np
 import matplotlib.pyplot as plt
 import os
@@ -231,7 +232,9 @@ class Malthus_estimator_sim(object):
         )
         if with_regression:  # Name are differents for regression
             name_fig = "regression_" + name_fig
-        plt.savefig(os.path.join(self.path_name, name_fig))
+        plt.savefig(
+            os.path.join(self.path_name, name_fig), bbox_extra_artists=[main_title],
+        )
 
     def plot_range_method(self, index_to_plot: int, with_regression: bool = False):
         """
@@ -301,7 +304,9 @@ class Malthus_estimator_sim(object):
         )
         if with_regression:  # Name are differents for regression
             name_fig = "regression_" + name_fig
-        plt.savefig(os.path.join(self.path_name, name_fig))
+        plt.savefig(
+            os.path.join(self.path_name, name_fig), bbox_extra_artists=[main_title],
+        )
 
     def plot_influence_n_simulation(self):
         """

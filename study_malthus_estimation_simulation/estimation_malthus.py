@@ -2,9 +2,9 @@
 # malthusian coefficient. It plots some curves linked to this test, and
 # save all results in a DataFrame
 
+# Packages
 import os
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 from malthus_estimator_simulation import Malthus_estimator_sim
 import warnings
@@ -80,10 +80,10 @@ if __name__ == "__main__":
             [
                 all_means,
                 all_var,
-                scores_method_1_no_reg,
-                scores_method_1_reg,
-                scores_method_2_no_reg,
-                scores_method_2_reg,
+                scores_norange_method_no_reg,
+                scores_norange_method_reg,
+                scores_range_method_no_reg,
+                scores_range_method_reg,
             ]
         ).T,
         columns=[

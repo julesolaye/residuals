@@ -1,10 +1,10 @@
 # This script allows to compare the two terms which compose residuals for two
 # specific time steps: ln(2)/malthus and its half.
+
+# Packages
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.stats
-from sklearn.linear_model import LinearRegression
 from multitype_simulation import Multitype
 
 

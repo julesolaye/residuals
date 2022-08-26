@@ -4,7 +4,7 @@
 
 # Packages
 import numpy as np
-from simulator_cells_dynamics import *
+from simulator_cells_dynamics import simulate_division, gamma
 import os
 import warnings
 
@@ -16,15 +16,14 @@ if __name__ == "__main__":
 
     ### Parameters simulation
     n_cells_init = 1
-    age_cells_init = np.zeros(1)
     max_cells = 13000
     pas_temps = 1
     n_simulations = 5000
 
     param_1_k = 0.6
     param_2_theta = 4.83
-    theta = (2 ** (1 / all_param_k) - 1) / malthus
 
+    ### Initialization
     law_gamma = lambda: gamma(param_1_k, param_2_theta)
     all_times = np.zeros((n_simulations, max_cells))
     all_cells = np.zeros((n_simulations, max_cells))
@@ -34,9 +33,8 @@ if __name__ == "__main__":
 
         print(simul)
 
-        (times, n_cells, age_cells, time_between_division,) = simulate_division(
+        (times, n_cells, time_between_division,) = simulate_division(
             n_cells_init=n_cells_init,
-            age_cells_init=age_cells_init,
             law_time_div=law_gamma,
             stopping_criteria="cells",
             max_cells=max_cells,

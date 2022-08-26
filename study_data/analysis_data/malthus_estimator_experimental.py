@@ -1,3 +1,4 @@
+# Packages
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -184,7 +185,7 @@ class Malthus_estimator_exp(object):
             Name of the directory where figures will be saved.
         """
         # Create directory
-        if os.path.isdir(path_name):
+        if not os.path.isdir(path_name):
             os.mkdir(path_name)
 
         # Save for the class

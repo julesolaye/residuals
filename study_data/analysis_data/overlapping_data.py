@@ -1,7 +1,9 @@
+# Packages
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy
-from scipy.stats import kstest, shapiro
+import os
+from scipy.stats import shapiro
 import seaborn as sb
 from sklearn.linear_model import LinearRegression
 from residuals import Residuals
@@ -176,7 +178,6 @@ class Overlapping_data(object):
         max_cells_residuals = np.arange(
             step_max_cells, max_cells + 1, step_max_cells
         )  # Range where we will compute residuals
-        n_cells_residuals = np.zeros((n_simuls, len(max_cells_residuals)))
         all_residuals = np.zeros((n_simuls, len(max_cells_residuals)))
 
         for simul in range(0, n_simuls):
@@ -292,7 +293,7 @@ class Overlapping_data(object):
         plt.ylabel("Density")
         plt.title(
             "Overlap of experimental data and gaussian, pval Shapiro = {}".format(
-                np.round(shapiro(self.residuals_by_intensities[index_to_plot],)[1],), 3,
+                np.round(shapiro(self.residuals_by_intensities[index_to_plot],)[1], 3),
             ),
             fontweight="bold",
         )
@@ -386,7 +387,7 @@ class Overlapping_data(object):
             Name of the directory where figures will be saved.
         """
         # Create directory
-        if os.path.isdir(path_name):
+        if not os.path.isdir(path_name):
             os.mkdir(path_name)
 
         # Save for the class

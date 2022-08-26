@@ -1,7 +1,8 @@
-import os
+# Packages
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sb
+import scipy
+import os
 from info_residuals import Info_residuals
 
 
@@ -70,6 +71,7 @@ class Plotter_exponential(object):
         self.plot_renormalization_residuals()
         self.plot_histograms()
         self.plot_individual_curves()
+        self.plot_histograms_limit_martingal()
 
     def plot_linear_regressions_results(self):
         """
@@ -155,21 +157,23 @@ class Plotter_exponential(object):
             (np.round(self.times_residuals[-1] / n_histogram, 1) // round_time)
             * round_time
         )
-        times_test_norm = np.arange(step_time, (n_histogram + 1) * step_time, step_time)
-        residus_plot_hist = np.zeros((self.n_simuls, n_histogram))
+        self.times_test_norm = np.arange(
+            step_time, (n_histogram + 1) * step_time, step_time
+        )  # Save
+        self.residuals_plot_hist = np.zeros((self.n_simuls, n_histogram))
         for simul in range(0, self.n_simuls):
 
             times = self.all_times[simul]
             n_cells = self.all_cells[simul]
             for index_time_residu in range(0, n_histogram):
-                index_temps = np.where(times_test_norm[index_time_residu] >= times)[0][
-                    -1
-                ]
+                index_temps = np.where(
+                    self.times_test_norm[index_time_residu] >= times
+                )[0][-1]
                 index_time_step = np.where(
-                    times_test_norm[index_time_residu] + self.time_step >= times
+                    self.times_test_norm[index_time_residu] + self.time_step >= times
                 )[0][-1]
 
-                residus_plot_hist[simul, index_time_residu] = (
+                self.residuals_plot_hist[simul, index_time_residu] = (
                     n_cells[index_time_step]
                     - np.exp(self.malthus * self.time_step) * n_cells[index_temps]
                 ) / np.exp((self.coeff_var) * times[index_temps])
@@ -184,20 +188,22 @@ class Plotter_exponential(object):
         for index_plot in range(0, n_histogram):
 
             # Shapiro test
-            test_shapiro = scipy.stats.shapiro(residuals_plot_hist[:, index_plot])
+            test_shapiro = scipy.stats.shapiro(self.residuals_plot_hist[:, index_plot])
             pvalue_test = test_shapiro[1]
 
             # Plot
             axs[index_plot // n_cols, index_plot % n_cols,].hist(
-                residus_plot_hist[:, index_plot],
+                self.residuals_plot_hist[:, index_plot],
                 n_bins,
                 color="blue",
                 label="variance = {}".format(
-                    np.round(np.var(residus_plot_hist[:, index_plot]), 3)
+                    np.round(np.var(self.residuals_plot_hist[:, index_plot]), 3)
                 ),
             )
             axs[index_plot // n_cols, index_plot % n_cols,].set_title(
-                "Time {}, pval = {}".format(times_test_norm[index_plot], pvalue_test)
+                "Time {}, pval = {}".format(
+                    self.times_test_norm[index_plot], pvalue_test
+                )
             )
 
             if index_plot % n_cols == 0:
@@ -260,6 +266,77 @@ class Plotter_exponential(object):
                 + "_param2_"
                 + str(self.parameter_2_distrib)
                 + "_indiv_curves.png",
+            ),
+            bbox_extra_artists=[main_title],
+        )
+
+    def plot_histograms_limit_martingal(self, index_start_analysis: int = 750):
+        """
+        This function allows to plot histogram of the limit random variable in 
+        the case of an exponential renormalization. It plots the histogram of 
+        the modulus of the random variable, and histogram at a certain time 
+        of the argument of the random variable. It allows to highlight the 
+        random modulus and phasis of the limit random variable.
+
+        Parameters
+        ------------
+        index_start_analysis : int 
+            Index of the array  all_residuals_renormalized where we consider that
+            residuals have almost converged.
+        """
+        # Compute elements
+        all_modulus = (
+            np.max(self.all_residuals_renormalized[:, index_start_analysis:], axis=1)
+            - np.min(self.all_residuals_renormalized[:, index_start_analysis:], axis=1)
+            / 2
+        )
+        all_arguments = np.arccos(self.residuals_plot_hist[:, -1] / all_modulus)
+
+        # Modules
+        size_fig = 12
+        n_bins = 25
+        fig = plt.figure(figsize=(size_fig, size_fig))
+        plt.hist(all_modulus, n_bins, color="brown")
+        plt.xlabel("Modulus")
+        plt.ylabel("Occurences")
+        main_title = plt.title(
+            "Modulus of limit random variable for several simulations" + self.end_title,
+            fontweight="bold",
+        )
+        plt.savefig(
+            os.path.join(
+                self.path_name,
+                self.name_distrib
+                + "_param1_"
+                + str(self.parameter_1_distrib)
+                + "_param2_"
+                + str(self.parameter_2_distrib)
+                + "_modulus.png",
+            ),
+            bbox_extra_artists=[main_title],
+        )
+
+        # Phases
+        size_fig = 12
+        n_bins = 25
+        fig = plt.figure(figsize=(size_fig, size_fig))
+        plt.hist(all_arguments, n_bins, color="brown")
+        plt.xlabel("Argument (radians)")
+        plt.ylabel("Occurences")
+        main_title = plt.title(
+            "Phase à t = {} pour plusieurs simulations".format(self.times_test_norm[-1])
+            + self.end_title,
+            fontweight="bold",
+        )
+        plt.savefig(
+            os.path.join(
+                self.path_name,
+                self.name_distrib
+                + "_param1_"
+                + str(self.parameter_1_distrib)
+                + "_param2_"
+                + str(self.parameter_2_distrib)
+                + "_argument.png",
             ),
             bbox_extra_artists=[main_title],
         )

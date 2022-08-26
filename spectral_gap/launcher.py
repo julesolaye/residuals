@@ -1,4 +1,6 @@
 # This script allow to plot the value of the spectral gap versus parameter k
+
+# Packages
 from os.path import join
 import numpy as np
 import matplotlib.pyplot as plt
@@ -93,35 +95,27 @@ def plot_spectral_gap(
 if __name__ == "__main__":
 
     ## Low parameters curve
-    start_param_k = 0.2
-    end_param_k = 4
     plot_spectral_gap(
-        start_param_k, end_param_k, name_fig="low_parameters_spectral_gap.png"
+        start_param_k=0.2, end_param_k=4, name_fig="low_parameters_spectral_gap.png"
     )
 
     ## Mid parameters curve
-    start_param_k = 4
-    end_param_k = 40
     plot_spectral_gap(
-        start_param_k, end_param_k, name_fig="mid_parameters_spectral_gap.png"
+        start_param_k=4, end_param_k=40, name_fig="mid_parameters_spectral_gap.png"
     )
 
     ## Parameters with cut the abscisse curve
-    start_param_k = 30
-    end_param_k = 70
     plot_spectral_gap(
-        start_param_k,
-        end_param_k,
+        start_param_k=30,
+        end_param_k=70,
         name_fig="cut_parameters_spectral_gap.png",
         with_vline=True,
     )
 
     ## High parameters curve
-    start_param_k = 50
-    end_param_k = 500
     plot_spectral_gap(
-        start_param_k,
-        end_param_k,
+        start_param_k=50,
+        end_param_k=500,
         name_fig="high_parameters_spectral_gap.png",
         with_vline=True,
     )

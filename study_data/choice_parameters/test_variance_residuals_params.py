@@ -4,7 +4,8 @@
 # Packages
 import numpy as np
 import pandas as pd
-from simulator_cells_dynamics import *
+import os
+from simulator_cells_dynamics import simulate_division, gamma
 import warnings
 
 # Don't show warnings when we launch script (more ergonomic, to be removed if needed).
@@ -28,44 +29,40 @@ if __name__ == "__main__":
     ## Test for each parameters
     variances_residuals = np.zeros(len(all_param_k))
     for index_param in range(0, len(all_param_k)):
+        print("----------------")
+        print("Parameter k: {}".format(all_param_k[index_param]))
 
-        param_1_k = all_param_k[index_param]
-        param_2_theta = all_params_theta[index_param]
-
-        law_gamma = lambda: gamma(param_1_k, param_2_theta)
-        all_value_process_before = np.zeros(n_simulations)
-        n_final_cells = np.zeros(n_simulations)
+        law_gamma = lambda: gamma(
+            all_param_k[index_param], all_params_theta[index_param]
+        )
         residuals = np.zeros(n_simulations)
 
-        malthus = (2 ** (1 / param_1_k) - 1) / param_2_theta
+        malthus = (2 ** (1 / all_param_k[index_param]) - 1) / all_params_theta[
+            index_param
+        ]
 
         for simul in range(n_simulations):
 
             # Simulation
-            (
-                times_,
-                n_cells_before,
-                age_cells_before,
-                time_between_division,
-            ) = simulate_division_number(
-                n_cells_init, age_cells_init, law_gamma, max_cells
+            (times_, n_cells_before, time_before_div,) = simulate_division(
+                n_cells_init=n_cells_init,
+                law_time_div=law_gamma,
+                stopping_criteria="cells",
+                max_cells=max_cells,
             )
             value_process_before = n_cells_before[-1]
-            all_value_process_before[simul] = value_process_before
 
             # We compute final cells number after step time
-            times, n_cells, age_cells = simulate_division_time(
-                value_process_before,
-                age_cells_before,
-                law_gamma,
-                pas_temps,
-                time_between_division,
+            times, n_cells, _ = simulate_division(
+                n_cells_init=value_process_before,
+                law_time_div=law_gamma,
+                stopping_criteria="time",
+                max_time=pas_temps,
+                time_before_div=time_before_div,
             )
-            n_final_cells[simul] = n_cells[-1]
 
             # Compute of residuals
             indice_max_moins_pas = np.where(times)
-
             residuals[simul] = (
                 n_cells[-1] - value_process_before * np.exp(pas_temps * malthus)
             ) / (np.sqrt(value_process_before))
@@ -75,7 +72,12 @@ if __name__ == "__main__":
 
     ## Save all variances in a dataframe
     variances_dataframe = pd.DataFrame(
-        data=np.array([all_param_k, variances_dataframe]),
+        data=np.array([all_param_k, variances_residuals]).T,
         columns=["Parameter k", "Variances"],
     )
+    path_name = "output/variances"
+    file_name = "scores.csv"
+    if not os.path.isdir(path_name):
+        os.mkdir(path_name)
+    variances_dataframe.to_csv(os.path.join(path_name, file_name))
 

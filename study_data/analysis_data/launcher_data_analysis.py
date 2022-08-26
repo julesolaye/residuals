@@ -1,15 +1,13 @@
 # This script allows to make analysis linked to experimental data (malthusian
 # coefficient, residuals, renormalization test, superposition).
 
-import numpy as np
-import matplotlib.pyplot as plt
+# Packages
 import scipy.io
 import warnings
 
 warnings.filterwarnings("ignore")
 from data_analyser import Data_analyser
-from malthus_estimator_experimental import Malthus_estimator_exp
-from residuals import Residuals
+
 
 if __name__ == "__main__":
 

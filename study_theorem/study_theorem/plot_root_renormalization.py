@@ -2,7 +2,6 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy
-import seaborn as sb
 from info_residuals import Info_residuals
 
 
