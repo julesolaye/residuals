@@ -11,7 +11,7 @@ This repository contains all the files of the simulations that we have done link
 
 * on figures to illustrate the different cases of our theorem (in the folder study_theorem/), and test if it is still valid for other distribution than Erlang distribution.
 
-The scripts in all these different folders allow to plot and save some figures (in output folder). Input files linked to simulations are not given because of their size but can be created with scripts from this repository.
+The scripts in all these different folders allow to plot and save some figures (in output folder). Input files linked to simulations are not given because of their size but can be created with scripts from this repository. Experimental data are also not give because of confidentiality.
 
 
 ## Setup
